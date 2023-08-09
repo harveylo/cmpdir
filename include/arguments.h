@@ -24,6 +24,8 @@ class Arguments{
         bool recursive;
         bool ignoreHidden;
         bool ignoreSize;
+        std::string sourceRegexString;
+        std::string destinationRegexString;
 };
 
 #endif

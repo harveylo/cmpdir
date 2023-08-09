@@ -1,4 +1,5 @@
 #include "arguments.h"
+#include <cstdio>
 #include <iostream>
 #include <getopt.h>
 #include "utils.h"
@@ -9,6 +10,8 @@ Arguments::Arguments(){
     this->ignoreSize = false;
     this->destination = "";
     this->source = ".";
+    this->sourceRegexString = "";
+    this->destinationRegexString = "";
 }
 
 void displayHelp(){
@@ -20,6 +23,8 @@ void displayHelp(){
     printf("\t-d, --destination: Destination directory\n");
     printf("\t-s, --source: Source directory\n");
     printf("\t-H, --help: Display this help and exit\n");
+    printf("\t-x, --source-regex: Regex to match files in source dir\n");
+    printf("\t-y, --destination-regex: Regex to match files in destination dir\n");
     printf("When SOURCE is not given, the current directory is used\n");
     printf("SOURCE and DEST can be given in order without option tags\n");
     printf("\tExample: compdir /home/user/source /home/user/destination\n");
@@ -37,6 +42,8 @@ bool Arguments::parseArguments(int argc, char **argv){
         {"destination", required_argument, NULL, 'd'},
         {"source", required_argument, NULL, 's'},
         {"help", no_argument, NULL, 'H'},
+        {"source-regex", required_argument, NULL, 'x'},
+        {"destination-regex", required_argument, NULL, 'y'},
         {NULL, 0, NULL, 0}
     };
     int c;
@@ -56,6 +63,12 @@ bool Arguments::parseArguments(int argc, char **argv){
                 break;
             case 's':
                 this->source = optarg;
+                break;
+            case 'x':
+                this->sourceRegexString = optarg;
+                break;
+            case 'y':
+                this->destinationRegexString = optarg;
                 break;
             case ':':
                 std::cout << "Missing argument for " << argv[optind-1] << std::endl;
@@ -86,6 +99,7 @@ bool Arguments::parseArguments(int argc, char **argv){
         std::cout << "Destination path is required" << std::endl;
         return false;
     }
+    
 #ifdef DEBUG
     std::cout<<"Arguments parsed successfully"<<std::endl;
 #endif
