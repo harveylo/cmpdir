@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include "utils.h"
 
+
 Arguments::Arguments(){
     this->recursive = false;
     this->ignoreHidden = false;
@@ -14,8 +15,13 @@ Arguments::Arguments(){
     this->destinationRegexString = "";
 }
 
+Arguments& Arguments::getInstance(){
+    static Arguments instance;
+    return instance;
+}
+
 void displayHelp(){
-    printf("Usage: compdir [OPTION]... [SOURCE] DEST\n");
+    printf("Usage: cmpdir [OPTION]... [SOURCE] DEST\n");
     printf("Valid options:\n");
     printf("\t-r, --recursive: Recursively compare sub-directories\n");
     printf("\t-h, --ignore-hidden: Ignore hidden files and directories\n");
@@ -34,7 +40,7 @@ void displayHelp(){
 
 bool Arguments::parseArguments(int argc, char **argv){
     this->originalArguments = argv;
-    this->argumentCount = argc;
+    this->argumentCount = argc-1;
     const struct option longopts[] = {
         {"recursive", no_argument, NULL, 'r'},
         {"ignore-hidden", no_argument, NULL, 'h'},
@@ -71,10 +77,10 @@ bool Arguments::parseArguments(int argc, char **argv){
                 this->destinationRegexString = optarg;
                 break;
             case ':':
-                std::cout << "Missing argument for " << argv[optind-1] << std::endl;
+                std::cout << "Missing argument for '" << argv[optind-1]<<"'" << std::endl;
                 return false;
             case '?':
-                std::cout << "Unknown argument " << (char)optopt << std::endl;
+                std::cout << "Unknown argument '" << (char)optopt <<"'"<< std::endl;
                 return false;
             case 'H':
                 return false;
@@ -101,7 +107,7 @@ bool Arguments::parseArguments(int argc, char **argv){
     }
     
 #ifdef DEBUG
-    std::cout<<"Arguments parsed successfully"<<std::endl;
+    DEBUG_FORMAT_PRINT(DEBUG_TAG, "%d arguments parsed successfully", this->argumentCount);
 #endif
     return true;
 }

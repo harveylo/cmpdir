@@ -7,8 +7,8 @@ void displayHelp();
 
 class Arguments{
     public:
-        Arguments();
-        ~Arguments() = default;
+        Arguments(const Arguments&) = delete;
+        Arguments& operator=(const Arguments&) = delete;
         bool parseArguments(int argc, char** argv);
         std::string getDestination();
         std::string getSource();
@@ -16,7 +16,10 @@ class Arguments{
         bool isIgnoreHidden();
         bool isIgnoreSize();
         int getArgumentCount();
+        static Arguments& getInstance();
     private:
+        Arguments();
+        ~Arguments() = default;
         char** originalArguments;
         int argumentCount;
         std::string destination;
