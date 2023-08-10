@@ -10,9 +10,9 @@ Usage: ``cmpdir [OPTION]... [SOURCE] DEST [PATTERN]``
     -s, --source: Source directory
     -H, --help: Display this help and exit
     -p, --pattern: Regex pattern to match file names
-When SOURCE is not given, the current directory is used.
+When `SOURCE` is not given, the current directory is used.
 
-SOURCE DEST and PATTERN can be given in order without option tags.
+`SOURCE` `DEST` and `PATTERN` can be given in order without option tags.
 
     Example: 
     compdir /home/user/source /home/user/destination ".*\.txt$"
@@ -21,15 +21,15 @@ SOURCE DEST and PATTERN can be given in order without option tags.
 
 ATTENTION: the `cmpdir DEST PATTERN` format is not supported.
 
-If two arguments without option tags are given, they are regarded as SOURCE and DEST respctively.
+If two arguments without option tags are given, they are regarded as `SOURCE` and `DEST` respctively.
 
 ## Result Format
 
-`-` indicates the file is only in the source directory
+`-` indicates that the file is only in the source directory
 
-`+` indicates the file is only in the destination directory
+`+` indicates that the file is only in the destination directory
 
-`~` indicates the file is in both directories, but the size is different
+`~` indicates that the file is in both directories, but their sizes is different
 
 Matched files are not printed, but the number of matched files is printed at the end of the result.
 ## Build Instructions
