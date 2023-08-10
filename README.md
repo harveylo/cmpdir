@@ -33,7 +33,7 @@ If two arguments without option tags are given, they are regarded as SOURCE and 
 
 Matched files are not printed, but the number of matched files is printed at the end of the result.
 ## Build Instructions
-Make sure your compiler support C++17 standard.
+Make sure your compiler supports C++17 standard.
 
 Please remember to use release configuration when using CMake to build the project.
 
