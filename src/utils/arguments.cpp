@@ -10,18 +10,13 @@ Arguments::Arguments(){
     this->ignoreHidden = false;
     this->ignoreSize = false;
     this->destination = "";
-    this->source = ".";
-    this->sourceRegexString = "";
-    this->destinationRegexString = "";
+    this->source = "";
+    this->patternString= "";
 }
 
-Arguments& Arguments::getInstance(){
-    static Arguments instance;
-    return instance;
-}
 
 void displayHelp(){
-    printf("Usage: cmpdir [OPTION]... [SOURCE] DEST\n");
+    printf("Usage: cmpdir [OPTION]... [SOURCE] DEST [PATTERN]\n");
     printf("Valid options:\n");
     printf("\t-r, --recursive: Recursively compare sub-directories\n");
     printf("\t-h, --ignore-hidden: Ignore hidden files and directories\n");
@@ -29,12 +24,11 @@ void displayHelp(){
     printf("\t-d, --destination: Destination directory\n");
     printf("\t-s, --source: Source directory\n");
     printf("\t-H, --help: Display this help and exit\n");
-    printf("\t-x, --source-regex: Regex to match files in source dir\n");
-    printf("\t-y, --destination-regex: Regex to match files in destination dir\n");
+    printf("\t-p, --pattern: Regex pattern to match file names\n");
     printf("When SOURCE is not given, the current directory is used\n");
     printf("SOURCE and DEST can be given in order without option tags\n");
     printf("\tExample: compdir /home/user/source /home/user/destination\n");
-    printf("which is equivalent to:\n");
+    printf("\twhich is equivalent to:\n");
     printf("\tcompdir -s /home/user/source -d /home/user/destination\n");
 }
 
@@ -48,12 +42,11 @@ bool Arguments::parseArguments(int argc, char **argv){
         {"destination", required_argument, NULL, 'd'},
         {"source", required_argument, NULL, 's'},
         {"help", no_argument, NULL, 'H'},
-        {"source-regex", required_argument, NULL, 'x'},
-        {"destination-regex", required_argument, NULL, 'y'},
+        {"pattern", required_argument, NULL, 'p'},
         {NULL, 0, NULL, 0}
     };
     int c;
-    while((c = getopt_long(argc, argv, "-:rhSd:s:", longopts, NULL))!=-1){
+    while((c = getopt_long(argc, argv, "-:rhSHd:s:p:", longopts, NULL))!=-1){
         switch(c){
             case 'r':
                 this->recursive = true;
@@ -70,11 +63,8 @@ bool Arguments::parseArguments(int argc, char **argv){
             case 's':
                 this->source = optarg;
                 break;
-            case 'x':
-                this->sourceRegexString = optarg;
-                break;
-            case 'y':
-                this->destinationRegexString = optarg;
+            case 'p':
+                this->patternString = optarg;
                 break;
             case ':':
                 std::cout << "Missing argument for '" << argv[optind-1]<<"'" << std::endl;
@@ -87,12 +77,15 @@ bool Arguments::parseArguments(int argc, char **argv){
             case 1:
                 if(this->destination == "")
                     this->destination = optarg;
-                else if(this->source == "."){
+                else if(this->source == ""){
                     this -> source = destination;
                     this -> destination = optarg;
                 }
+                else if(patternString==""){
+                    this->patternString = optarg;
+                }
                 else {
-                    std::cout << "Too many directory paths, only 2 paths are allowed" << std::endl;
+                    std::cout << "Too many directory paths and regex patterns, only 2 paths and 1 pattern are allowed" << std::endl;
                     return false;
                 }
                 break;
@@ -105,29 +98,15 @@ bool Arguments::parseArguments(int argc, char **argv){
         std::cout << "Destination path is required" << std::endl;
         return false;
     }
+    if(this -> source == ""){
+        this -> source = ".";
+    }
+    if(this->patternString == ""){
+        this->patternString = ".*";
+    }
     
 #ifdef DEBUG
     DEBUG_FORMAT_PRINT(DEBUG_TAG, "%d arguments parsed successfully", this->argumentCount);
 #endif
     return true;
-}
-
-std::string Arguments::getDestination(){
-    return this->destination;
-}
-std::string Arguments::getSource(){
-    return this->source;
-}
-bool Arguments::isRecursive(){
-    return this->recursive;
-}
-bool Arguments::isIgnoreHidden(){
-    return this->ignoreHidden;
-}
-bool Arguments::isIgnoreSize(){
-    return this->ignoreSize;
-}
-
-int Arguments::getArgumentCount(){
-    return this->argumentCount;
 }

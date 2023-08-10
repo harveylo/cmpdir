@@ -1,8 +1,11 @@
 #ifndef __WORKLOAD_H__
 #define __WORKLOAD_H__
+#include "result.h"
 #include <cstdint>
-#include <string>
+#include <filesystem>
 
-void handle_directory(std::string source, std::string destination, uint64_t level);
+void handle_directory(std::filesystem::path source, std::filesystem::path destination, uint64_t level);
+
+void initialize_regex();
 
 #endif

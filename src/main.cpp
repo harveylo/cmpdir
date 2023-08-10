@@ -1,8 +1,10 @@
+#include <cstdio>
 #include <filesystem>
 #include <iostream>
 #include <string>
 #include "arguments.h"
 #include "utils.h"
+#include "workload.h"
 
 
 int main(int argc, char** argv){
@@ -21,6 +23,7 @@ int main(int argc, char** argv){
 #ifdef DEBUG
     DEBUG_FORMAT_PRINT(INFO_TAG, "Source: %s", abs_source.c_str());
     DEBUG_FORMAT_PRINT(INFO_TAG, "Destination: %s", abs_destination.c_str());
+    DEBUG_FORMAT_PRINT(INFO_TAG, "PatternString: %s", arguments.getPatternString().c_str());
 #endif
     
     if(!std::filesystem::exists(abs_source)||!std::filesystem::is_directory(abs_source)){
@@ -32,6 +35,7 @@ int main(int argc, char** argv){
         return 1;
     }
 
+    initialize_regex();
 
-    
+    handle_directory(abs_source, abs_destination, 0);
 }

@@ -10,13 +10,31 @@ class Arguments{
         Arguments(const Arguments&) = delete;
         Arguments& operator=(const Arguments&) = delete;
         bool parseArguments(int argc, char** argv);
-        std::string getDestination();
-        std::string getSource();
-        bool isRecursive();
-        bool isIgnoreHidden();
-        bool isIgnoreSize();
-        int getArgumentCount();
-        static Arguments& getInstance();
+        std::string getDestination(){
+            return this->destination;
+        }
+        std::string getSource(){
+            return this->source;
+        }
+        bool isRecursive(){
+            return this->recursive;
+        }
+        bool isIgnoreHidden(){
+            return this->ignoreHidden;
+        }
+        bool isIgnoreSize(){
+            return this->ignoreSize;
+        }
+        int getArgumentCount(){
+            return this->argumentCount;
+        }
+        static Arguments& getInstance(){
+            static Arguments instance;
+            return instance;
+        }
+        std::string getPatternString(){
+            return this->patternString;
+        }
     private:
         Arguments();
         ~Arguments() = default;
@@ -27,8 +45,7 @@ class Arguments{
         bool recursive;
         bool ignoreHidden;
         bool ignoreSize;
-        std::string sourceRegexString;
-        std::string destinationRegexString;
+        std::string patternString;
 };
 
 #endif
