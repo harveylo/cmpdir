@@ -27,11 +27,13 @@ int main(int argc, char** argv){
 #endif
     
     if(!std::filesystem::exists(abs_source)||!std::filesystem::is_directory(abs_source)){
-        DEBUG_FORMAT_PRINT(ERROR_TAG, "Source directory does not exist or it's not a directory");
+        DEBUG_FORMAT_PRINT(ERROR_TAG, "Source directory \"%s\" does not exist or it's not a directory", abs_source.c_str());
+        displayHelp();
         return 1;
     }
     if(!std::filesystem::exists(abs_destination)||!std::filesystem::is_directory(abs_destination)){
-        DEBUG_FORMAT_PRINT(ERROR_TAG, "Destination directory does not exist or it's not a directory");
+        DEBUG_FORMAT_PRINT(ERROR_TAG, "Destination directory \"%s\" does not exist or it's not a directory", abs_destination.c_str());
+        displayHelp();
         return 1;
     }
 
