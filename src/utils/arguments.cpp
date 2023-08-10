@@ -6,12 +6,12 @@
 
 
 Arguments::Arguments(){
-    this->recursive = false;
-    this->ignoreHidden = false;
-    this->ignoreSize = false;
-    this->destination = "";
-    this->source = "";
-    this->patternString= "";
+    recursive = false;
+    ignoreHidden = false;
+    ignoreSize = false;
+    destination = "";
+    source = "";
+    patternString= "";
 }
 
 
@@ -33,8 +33,8 @@ void displayHelp(){
 }
 
 bool Arguments::parseArguments(int argc, char **argv){
-    this->originalArguments = argv;
-    this->argumentCount = argc-1;
+    originalArguments = argv;
+    argumentCount = argc-1;
     const struct option longopts[] = {
         {"recursive", no_argument, NULL, 'r'},
         {"ignore-hidden", no_argument, NULL, 'h'},
@@ -49,22 +49,22 @@ bool Arguments::parseArguments(int argc, char **argv){
     while((c = getopt_long(argc, argv, "-:rhSHd:s:p:", longopts, NULL))!=-1){
         switch(c){
             case 'r':
-                this->recursive = true;
+                recursive = true;
                 break;
             case 'h':
-                this->ignoreHidden = true;
+                ignoreHidden = true;
                 break;
             case 'S':
-                this->ignoreSize = true;
+                ignoreSize = true;
                 break;
             case 'd':
-                this->destination = optarg;
+                destination = optarg;
                 break;
             case 's':
-                this->source = optarg;
+                source = optarg;
                 break;
             case 'p':
-                this->patternString = optarg;
+                patternString = optarg;
                 break;
             case ':':
                 std::cout << "Missing argument for '" << argv[optind-1]<<"'" << std::endl;
@@ -75,14 +75,14 @@ bool Arguments::parseArguments(int argc, char **argv){
             case 'H':
                 return false;
             case 1:
-                if(this->destination == "")
-                    this->destination = optarg;
-                else if(this->source == ""){
+                if(destination == "")
+                    destination = optarg;
+                else if(source == ""){
                     this -> source = destination;
                     this -> destination = optarg;
                 }
                 else if(patternString==""){
-                    this->patternString = optarg;
+                    patternString = optarg;
                 }
                 else {
                     std::cout << "Too many directory paths and regex patterns, only 2 paths and 1 pattern are allowed" << std::endl;
@@ -94,19 +94,19 @@ bool Arguments::parseArguments(int argc, char **argv){
                 return false;
         }
     }
-    if(this->destination == ""){
+    if(destination == ""){
         std::cout << "Destination path is required" << std::endl;
         return false;
     }
     if(this -> source == ""){
         this -> source = ".";
     }
-    if(this->patternString == ""){
-        this->patternString = ".*";
+    if(patternString == ""){
+        patternString = ".*";
     }
     
 #ifdef DEBUG
-    DEBUG_FORMAT_PRINT(DEBUG_TAG, "%d arguments parsed successfully", this->argumentCount);
+    DEBUG_FORMAT_PRINT(DEBUG_TAG, "%d arguments parsed successfully", argumentCount);
 #endif
     return true;
 }

@@ -1,7 +1,7 @@
 # A tool to compare two directories' files
 Usage: ``cmpdir [OPTION]... [SOURCE] DEST [PATTERN]``
 
-Valid options:
+## Valid Options:
 
     -r, --recursive: Recursively compare sub-directories
     -h, --ignore-hidden: Ignore hidden files and directories
@@ -12,9 +12,23 @@ Valid options:
     -p, --pattern: Regex pattern to match file names
 When SOURCE is not given, the current directory is used.
 
-SOURCE and DEST can be given in order without option tags.
+SOURCE DEST and PATTERN can be given in order without option tags.
 
     Example: 
-    compdir /home/user/source /home/user/destination
+    compdir /home/user/source /home/user/destination ".*\.txt$"
     which is equivalent to:
-    compdir -s /home/user/source -d /home/user/destination
+    compdir -s /home/user/source -d /home/user/destination -p ".*\.txt$"
+
+ATTENTION: the `cmpdir DEST PATTERN` format is not supported.
+
+If two arguments without option tags are given, they are regarded as SOURCE and DEST respctively.
+
+## Result Format
+
+`-` indicates the file is only in the source directory
+
+`+` indicates the file is only in the destination directory
+
+`~` indicates the file is in both directories, but the size is different
+
+Matched files are not printed, but the number of matched files is printed at the end of the result.
