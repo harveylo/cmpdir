@@ -1,5 +1,5 @@
 # A tool to compare two directories' files
-![example](https://github.com/harveylo/cmpdir/blob/master/doc/example.png = 244x287)
+<img src="https://your-image-url.typehttps://github.com/harveylo/cmpdir/blob/master/doc/example.png" width="244" height="287">
 
 Usage: ``cmpdir [OPTION]... [SOURCE] DEST [PATTERN]``
 
