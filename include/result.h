@@ -4,6 +4,8 @@
 #include "utils.h"
 #include <cstddef>
 #include <cstdint>
+#include <cstdio>
+#include <unordered_map>
 #include <vector>
 #include <filesystem>
 
@@ -22,10 +24,21 @@ class Result{
             if(level == 0) return;
             for(uint64_t i = 0; i < level; i++){
                 printf(" ");
+                if(prefix_map.contains(i)) printf("|");
+                else printf(" ");
             }
-            printf("|_");
+            printf("_");
+        }
+        static void add_prefix(uint64_t level){
+            prefix_map[level]++;
+        }
+        static void remove_prefix(uint64_t level){
+            if(!prefix_map.contains(level)) return;
+            prefix_map[level]--;
+            if(prefix_map[level] == 0) prefix_map.erase(level);
         }
     private:
+        static std::unordered_map<uint64_t, int> prefix_map;
         void general_print(Color);
 };
 

@@ -44,7 +44,7 @@ static void handle_mismatch(std::filesystem::directory_entry entry, ResultList& 
 
 
 void handle_directory(std::filesystem::path source, std::filesystem::path destination, uint64_t level) {
-    ResultList result_list(level);
+    ResultList result_list(level+1);
     int count = 0; 
     int dcount = 0;
     Arguments& arguments = Arguments::getInstance();
@@ -87,12 +87,15 @@ void handle_directory(std::filesystem::path source, std::filesystem::path destin
 
 
     int i = 0,j=0;
+    Result::add_prefix(level);
     if(level == 0){
-        printf("In the base directory\n");
+        printf("  In the base directory\n");
     }else {
-        Result::print_prefix(level);
+        Result::print_prefix(level+1);
         printf("In the directory: %s\n", source.filename().string().c_str());
     }
+    Result::remove_prefix(level);
+    Result::add_prefix(level+1);
     while(i<source_entries.size()&&j<destination_entries.size()){
         auto& source_entry = source_entries[i];
         auto& destination_entry = destination_entries[j];
@@ -104,7 +107,7 @@ void handle_directory(std::filesystem::path source, std::filesystem::path destin
             }
             if(source_entry.is_directory()&&destination_entry.is_directory()){
                 if(arguments.isRecursive()){
-                        handle_directory(source_entry.path(), destination_entry.path(), level+2);
+                        handle_directory(source_entry.path(), destination_entry.path(), level+1);
                         hasRecurse = true; 
                     }
                 else dcount++;
@@ -142,15 +145,16 @@ void handle_directory(std::filesystem::path source, std::filesystem::path destin
 
     result_list.print();
     if(count>0){
-        Result::print_prefix(level+1);
+        Result::print_prefix(level+2);
         printf("%d file(s) %smatched\n", count, arguments.isIgnoreSize()?"name ":"name and size ");
     }
     if(dcount>0){
-        Result::print_prefix(level+1);
+        Result::print_prefix(level+2);
         printf("%d folder(s) name matched\n", dcount);
     }
     if(result_list.size()==0&&count==0&&dcount==0&&!hasRecurse){
-        Result::print_prefix(level+1);
+        Result::print_prefix(level+2);
         printf("Empty Folder\n");
     }
+    Result::remove_prefix(level+1);
 }

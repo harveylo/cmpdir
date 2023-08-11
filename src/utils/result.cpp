@@ -8,13 +8,15 @@
 
 
 
+std::unordered_map<uint64_t,int> Result::prefix_map = std::unordered_map<uint64_t,int>();
+
 Result::Result(){
     this->status = 0;
     this->level = 0;
 }
 Result::Result(uint64_t level) : level(level){} 
 void Result::print(){
-    print_prefix(this->level);
+    print_prefix(level);
     if(this->status < 0){
         if(Arguments::getInstance().isVerbose())
             colored_print(Color::RED, "- %s%s\n" , std::filesystem::absolute(source.path().string()).string().c_str(), (isDirectory?" (folder)":""));

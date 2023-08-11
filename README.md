@@ -1,4 +1,5 @@
 # A tool to compare two directories' files
+[!example](./doc/example.png)
 Usage: ``cmpdir [OPTION]... [SOURCE] DEST [PATTERN]``
 
 ## Valid Options:
