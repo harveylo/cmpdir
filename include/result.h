@@ -1,10 +1,11 @@
 #ifndef __RESULT_H__
 #define __RESULT_H__
 
+#include "utils.h"
 #include <cstddef>
 #include <cstdint>
-#include <string>
 #include <vector>
+#include <filesystem>
 
 class Result{
     public:
@@ -14,8 +15,8 @@ class Result{
         virtual void print();
         int status;
         bool isDirectory;
-        std::string source;
-        std::string destination;
+        std::filesystem::directory_entry source;
+        std::filesystem::directory_entry destination;
         uint64_t level;
         static void print_prefix(uint64_t level){
             if(level == 0) return;
@@ -24,6 +25,8 @@ class Result{
             }
             printf("|_");
         }
+    private:
+        void general_print(Color);
 };
 
 
@@ -36,10 +39,10 @@ class ResultList: public Result{
         std::vector<Result>& getResults(){
             return this->results;
         }
-        void addResult(std::string source, std::string destination, int status, bool isDirectory){
+        void addResult(std::filesystem::directory_entry* source, std::filesystem::directory_entry* destination, int status, bool isDirectory){
             Result result(this->level+1);
-            result.source = source;
-            result.destination = destination;
+            if(source )result.source = *source;
+            if(destination)result.destination = *destination;
             result.status = status;
             result.isDirectory = isDirectory;
             results.emplace_back(result);

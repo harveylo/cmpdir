@@ -3,50 +3,35 @@
 #include <cstdint>
 #include <cstdio>
 #include "utils.h"
+#include "arguments.h"
+
+
+
 
 Result::Result(){
     this->status = 0;
-    this->source = "";
-    this->destination = "";
     this->level = 0;
 }
 Result::Result(uint64_t level) : level(level){} 
 void Result::print(){
     print_prefix(this->level);
     if(this->status < 0){
-        printf(
-            #ifdef COLORED_OUTPUT
-                COLOR_RED_FG
-            #endif
-            "- %s%s\n"
-            #ifdef COLORED_OUTPUT
-                COLOR_RESET
-            #endif
-            , this->source.c_str(),(isDirectory?" (folder)":"")
-        );
+        if(Arguments::getInstance().isVerbose())
+            colored_print(Color::RED, "- %s%s\n" , std::filesystem::absolute(source.path().string()).string().c_str(), (isDirectory?" (folder)":""));
+        else 
+            colored_print(Color::RED, "- %s%s\n" , source.path().filename().string().c_str(), (isDirectory?" (folder)":""));
     }else if(this->status > 0){
-        printf(
-            #ifdef COLORED_OUTPUT
-                COLOR_GREEN_FG
-            #endif
-            "+ %s%s\n"
-            #ifdef COLORED_OUTPUT
-                COLOR_RESET
-            #endif
-            , this->destination.c_str(), (isDirectory?" (folder)":"")
-        );
+        if(Arguments::getInstance().isVerbose())
+            colored_print(Color::GREEN, "+ %s%s\n" , std::filesystem::absolute(destination.path().string()).string().c_str(), (isDirectory?" (folder)":""));
+        else 
+            colored_print(Color::GREEN, "+ %s%s\n" , destination.path().filename().string().c_str(), (isDirectory?" (folder)":""));
     }else{
-        printf(
-            #ifdef COLORED_OUTPUT
-                COLOR_YELLOW_FG
-            #endif
-            "~ %s%s\n"
-            #ifdef COLORED_OUTPUT
-                COLOR_RESET
-            #endif
-            , this->source.c_str(), (isDirectory?" (folder)":"")
-        );
+        if(Arguments::getInstance().isVerbose())
+            colored_print(Color::YELLOW, "~ %s%s\n" , std::filesystem::absolute(source.path().string()).string().c_str(), (isDirectory?" (folder)":""));
+        else 
+            colored_print(Color::YELLOW, "~ %s%s\n" , source.path().filename().string().c_str(), (isDirectory?" (folder)":""));
     }
+
 }
 
 ResultList::ResultList():Result(){

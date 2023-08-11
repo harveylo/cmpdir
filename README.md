@@ -10,6 +10,8 @@ Usage: ``cmpdir [OPTION]... [SOURCE] DEST [PATTERN]``
     -s, --source: Source directory
     -H, --help: Display this help and exit
     -p, --pattern: Regex pattern to match file names
+    -c, --color-off: Disable colored output
+    -v, --verbose: Print verbose information
 When `SOURCE` is not given, the current directory is used.
 
 `SOURCE` `DEST` and `PATTERN` can be given in order without option tags.

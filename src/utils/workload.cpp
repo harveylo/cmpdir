@@ -21,8 +21,8 @@ static void handle_remaining(int i, std::vector<std::filesystem::directory_entry
         }
         if(std::regex_match(source_entry.path().filename().string(), pattern)){
             result_list.addResult(
-                status<0?source_entry.path().filename().string():"",
-                status>0?source_entry.path().filename().string():"",
+                &source_entry,
+                &source_entry,
                 status,
                 source_entry.is_directory()
             );
@@ -34,8 +34,8 @@ static void handle_mismatch(std::filesystem::directory_entry entry, ResultList& 
     if(entry.path().filename().string()[0]=='.'&&arguments.isIgnoreHidden()) return;
     if(std::regex_match(entry.path().filename().string(), pattern)||entry.is_directory()){
         result_list.addResult(
-            status<0?entry.path().filename().string():"",
-            status>0?entry.path().filename().string():"",
+            &entry,
+            &entry,
             status,
             entry.is_directory()
         );
@@ -113,7 +113,7 @@ void handle_directory(std::filesystem::path source, std::filesystem::path destin
                 if(std::regex_match(source_entry.path().filename().string(), pattern)){
                     if(!arguments.isIgnoreSize()){
                         if(std::filesystem::file_size(source_entry.path())!=std::filesystem::file_size(destination_entry.path())){
-                            result_list.addResult(source_entry.path().filename().string(), destination_entry.path().filename().string(), 0, false);
+                            result_list.addResult(&source_entry, &destination_entry, 0, false);
                         }else count++;
                     }else count++;
                 }

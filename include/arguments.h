@@ -33,7 +33,13 @@ class Arguments{
             return instance;
         }
         std::string getPatternString(){
-            return this->patternString;
+            return patternString;
+        }
+        bool isColored(){
+            return colored;
+        }
+        bool isVerbose(){
+            return verbose;
         }
     private:
         Arguments();
@@ -45,6 +51,8 @@ class Arguments{
         bool recursive;
         bool ignoreHidden;
         bool ignoreSize;
+        bool colored;
+        bool verbose;
         std::string patternString;
 };
 

@@ -12,6 +12,7 @@ Arguments::Arguments(){
     destination = "";
     source = "";
     patternString= "";
+    colored = true;
 }
 
 
@@ -25,6 +26,8 @@ void displayHelp(){
     printf("\t-s, --source: Source directory\n");
     printf("\t-H, --help: Display this help and exit\n");
     printf("\t-p, --pattern: Regex pattern to match file names\n");
+    printf("\t-c, --color-off: Disable colored output\n");
+    printf("\t-v, --verbose: Print verbose information.\n");
     printf("When SOURCE is not given, the current directory is used\n");
     printf("SOURCE and DEST can be given in order without option tags\n");
     printf("\tExample: compdir /home/user/source /home/user/destination\n");
@@ -43,10 +46,12 @@ bool Arguments::parseArguments(int argc, char **argv){
         {"source", required_argument, NULL, 's'},
         {"help", no_argument, NULL, 'H'},
         {"pattern", required_argument, NULL, 'p'},
+        {"color-off", no_argument, NULL, 'c'},
+        {"verbose", no_argument, NULL, 'v'},
         {NULL, 0, NULL, 0}
     };
     int c;
-    while((c = getopt_long(argc, argv, "-:rhSHd:s:p:", longopts, NULL))!=-1){
+    while((c = getopt_long(argc, argv, "-:rhcSHvd:s:p:", longopts, NULL))!=-1){
         switch(c){
             case 'r':
                 recursive = true;
@@ -74,6 +79,12 @@ bool Arguments::parseArguments(int argc, char **argv){
                 return false;
             case 'H':
                 return false;
+            case 'c':
+                colored = false;
+                break;
+            case 'v':
+                verbose = true;
+                break;
             case 1:
                 if(destination == "")
                     destination = optarg;

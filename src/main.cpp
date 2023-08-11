@@ -17,10 +17,10 @@ int main(int argc, char** argv){
     std::string source = arguments.getSource();
     std::string destination = arguments.getDestination();
 
-    auto abs_source = std::filesystem::absolute(source);
-    auto abs_destination = std::filesystem::absolute(destination);
 
 #ifdef DEBUG
+    auto abs_source = std::filesystem::absolute(source);
+    auto abs_destination = std::filesystem::absolute(destination);
     DEBUG_FORMAT_PRINT(INFO_TAG, "Source: %s", abs_source.c_str());
     DEBUG_FORMAT_PRINT(INFO_TAG, "Destination: %s", abs_destination.c_str());
     DEBUG_FORMAT_PRINT(INFO_TAG, "PatternString: %s", arguments.getPatternString().c_str());
@@ -39,5 +39,5 @@ int main(int argc, char** argv){
 
     initialize_regex();
 
-    handle_directory(abs_source, abs_destination, 0);
+    handle_directory(source, destination, 0);
 }
