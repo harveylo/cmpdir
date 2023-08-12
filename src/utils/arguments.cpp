@@ -17,6 +17,7 @@ Arguments::Arguments(){
 
 
 void displayHelp(){
+    printf("Compare two directories and list files that are different.\n");
     printf("Usage: cmpdir [OPTION]... [SOURCE] DEST [PATTERN]\n");
     printf("Valid options:\n");
     printf("\t-r, --recursive: Recursively compare sub-directories\n");

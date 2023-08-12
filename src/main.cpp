@@ -14,8 +14,8 @@ int main(int argc, char** argv){
         return 1;
     }
 
-    std::string source = arguments.getSource();
-    std::string destination = arguments.getDestination();
+    std::string source = std::filesystem::path(arguments.getSource());
+    std::string destination = std::filesystem::path(arguments.getDestination());
 
 
 #ifdef DEBUG
@@ -26,13 +26,13 @@ int main(int argc, char** argv){
     DEBUG_FORMAT_PRINT(INFO_TAG, "PatternString: %s", arguments.getPatternString().c_str());
 #endif
     
-    if(!std::filesystem::exists(abs_source)||!std::filesystem::is_directory(abs_source)){
-        DEBUG_FORMAT_PRINT(ERROR_TAG, "Source directory \"%s\" does not exist or it's not a directory", abs_source.c_str());
+    if(!std::filesystem::exists(source)||!std::filesystem::is_directory(source)){
+        DEBUG_FORMAT_PRINT(ERROR_TAG, "Source directory \"%s\" does not exist or it's not a directory", source.c_str());
         displayHelp();
         return 1;
     }
-    if(!std::filesystem::exists(abs_destination)||!std::filesystem::is_directory(abs_destination)){
-        DEBUG_FORMAT_PRINT(ERROR_TAG, "Destination directory \"%s\" does not exist or it's not a directory", abs_destination.c_str());
+    if(!std::filesystem::exists(destination)||!std::filesystem::is_directory(destination)){
+        DEBUG_FORMAT_PRINT(ERROR_TAG, "Destination directory \"%s\" does not exist or it's not a directory", destination.c_str());
         displayHelp();
         return 1;
     }
