@@ -37,8 +37,17 @@ void displayHelp(){
 }
 
 bool Arguments::parseArguments(int argc, char **argv){
+    if(argv==nullptr||argc<=0) return false;
     originalArguments = argv;
-    argumentCount = argc-1;
+    argumentCount = 0;
+    ignoreSize = false;
+    ignoreHidden = false;
+    recursive = false;
+    colored = true;
+    destination = "";
+    source = "";
+    patternString = "";
+    verbose = false;
     const struct option longopts[] = {
         {"recursive", no_argument, NULL, 'r'},
         {"ignore-hidden", no_argument, NULL, 'h'},
@@ -56,21 +65,27 @@ bool Arguments::parseArguments(int argc, char **argv){
         switch(c){
             case 'r':
                 recursive = true;
+                argumentCount++;
                 break;
             case 'h':
                 ignoreHidden = true;
+                argumentCount++;
                 break;
             case 'S':
                 ignoreSize = true;
+                argumentCount++;
                 break;
             case 'd':
                 destination = optarg;
+                argumentCount++;
                 break;
             case 's':
                 source = optarg;
+                argumentCount++;
                 break;
             case 'p':
                 patternString = optarg;
+                argumentCount++;
                 break;
             case ':':
                 std::cout << "Missing argument for '" << argv[optind-1]<<"'" << std::endl;
@@ -82,9 +97,11 @@ bool Arguments::parseArguments(int argc, char **argv){
                 return false;
             case 'c':
                 colored = false;
+                argumentCount++;
                 break;
             case 'v':
                 verbose = true;
+                argumentCount++;
                 break;
             case 1:
                 if(destination == "")
@@ -100,6 +117,7 @@ bool Arguments::parseArguments(int argc, char **argv){
                     std::cout << "Too many directory paths and regex patterns, only 2 paths and 1 pattern are allowed" << std::endl;
                     return false;
                 }
+                argumentCount++;
                 break;
             default:
                 std::cout << "Unknown error" << std::endl;
