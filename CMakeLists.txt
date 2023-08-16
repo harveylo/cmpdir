@@ -22,41 +22,23 @@ add_compile_definitions(
     $<$<CONFIG:Debug>:DEBUG>
 )
 
-# if ($<CONFIG:Debug> )
-#     SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -g3 -O0 --coverage -fprofile-arcs -ftest-coverage")
-#     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g3 -O0 --coverage -fprofile-arcs -ftest-coverage")
-#     SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-# endif()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
-# set(OBJECT_DIR ${CMAKE_BINARY_DIR}/src/CMakeFiles/cmpdir.dir)
-# # message("-- Object files will be output to: ${OUTPUT_DIR}")
+SET(BUILD ${CMAKE_BINARY_DIR})
+SET(ROOT ${CMAKE_SOURCE_DIR})
 
-# add_custom_target(gcov
-#     COMMAND mkdir -p gcoverage
-#     COMMAND ${CMAKE_MAKE_PROGRAM} test
-#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-# )
-# add_custom_command(TARGET gcov
-#     COMMAND echo "=================== GCOV ===================="
-#     COMMAND gcov -b ${CMAKE_SOURCE_DIR}/src/*.cpp -o ${OBJECT_DIR}
-#     COMMAND echo "-- Source diretorie: ${CMAKE_SOURCE_DIR}/src/"
-#     COMMAND echo "-- Coverage files have been output to ${CMAKE_BINARY_DIR}/gcoverage"
-#     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/gcoverage
-# )
-
-# add_custom_target(lcov
-#     COMMAND mkdir -p lcoverage
-# )
-# add_custom_target(TARGET lcov
-#     COMMAND echo "=================== LCOV ===================="
-#     COMMAND echo "-- Passing lcov tool under code coverage"
-#     COMMAND lcov --capture --directory ../ --output-file lcoverage/main_coverage.info
-#     COMMAND echo "-- Generating HTML output files"
-#     COMMAND genhtml lcoverage/main_coverage.info --output-directory lcoverage
-# )
+add_custom_target(cov_report
+    COMMAND ctest
+    COMMAND echo "=================== LCOV ===================="
+    COMMAND lcov --capture --d ${ROOT}/src 
+    -d ${ROOT}/include -d ${BUILD}/test -t test 
+    -b ${BUILD}/test -o ${BUILD}/test/cover.info 
+    --rc lcov_branch_coverage=1 --no-external
+    COMMAND echo "-- Generating HTML output files"
+    COMMAND genhtml ${BUILD}/test/cover.info -o ${BUILD}/report --rc genhtml_branch_coverage=1
+)
 
 # Put enable_testing() at the top of top-level CMakeLists.txt file
 # to enable testing via visual studio code's 'Run Ctest' button or command
