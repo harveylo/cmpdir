@@ -26,18 +26,18 @@ add_compile_definitions(
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 
-SET(BUILD ${CMAKE_BINARY_DIR})
-SET(ROOT ${CMAKE_SOURCE_DIR})
+SET(TEST_P ${CMAKE_BINARY_DIR}/test)
+SET(ROOT_P ${CMAKE_SOURCE_DIR})
 
 add_custom_target(cov_report
     COMMAND ctest
     COMMAND echo "=================== LCOV ===================="
-    COMMAND lcov --capture --d ${ROOT}/src 
-    -d ${ROOT}/include -d ${BUILD}/test -t test 
-    -b ${BUILD}/test -o ${BUILD}/test/cover.info 
+    COMMAND lcov --capture --d ${ROOT_P}/src 
+    -d ${ROOT_P}/include -d ${TEST_P} -t test 
+    -b ${TEST_P} -o ${TEST_P}/cover.info 
     --rc lcov_branch_coverage=1 --no-external
     COMMAND echo "-- Generating HTML output files"
-    COMMAND genhtml ${BUILD}/test/cover.info -o ${BUILD}/report --rc genhtml_branch_coverage=1
+    COMMAND genhtml ${TEST_P}/cover.info -o ${TEST_P}/report --rc genhtml_branch_coverage=1
 )
 
 # Put enable_testing() at the top of top-level CMakeLists.txt file

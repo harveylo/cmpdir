@@ -17,23 +17,23 @@ Arguments::Arguments(){
 
 
 void displayHelp(){
-    printf("Compare two directories and list files that are different.\n");
-    printf("Usage: cmpdir [OPTION]... [SOURCE] DEST [PATTERN]\n");
-    printf("Valid options:\n");
-    printf("\t-r, --recursive: Recursively compare sub-directories\n");
-    printf("\t-h, --ignore-hidden: Ignore hidden files and directories\n");
-    printf("\t-S, --ignore-size: Ignore file sizes, only compare file names\n");
-    printf("\t-d, --destination: Destination directory\n");
-    printf("\t-s, --source: Source directory\n");
-    printf("\t-H, --help: Display this help and exit\n");
-    printf("\t-p, --pattern: Regex pattern to match file names\n");
-    printf("\t-c, --color-off: Disable colored output\n");
-    printf("\t-v, --verbose: Print verbose information.\n");
-    printf("When SOURCE is not given, the current directory is used\n");
-    printf("SOURCE and DEST can be given in order without option tags\n");
-    printf("\tExample: compdir /home/user/source /home/user/destination\n");
-    printf("\twhich is equivalent to:\n");
-    printf("\tcompdir -s /home/user/source -d /home/user/destination\n");
+    std::cout<<"Compare two directories and list files that are different."<<std::endl;
+    std::cout<<"Usage: cmpdir [OPTION]... [SOURCE] DEST [PATTERN]"<<std::endl;
+    std::cout<<"Valid options:"<<std::endl;
+    std::cout<<"\t-r, --recursive: Recursively compare sub-directories"<<std::endl;
+    std::cout<<"\t-h, --ignore-hidden: Ignore hidden files and directories"<<std::endl;
+    std::cout<<"\t-S, --ignore-size: Ignore file sizes, only compare file names"<<std::endl;
+    std::cout<<"\t-d, --destination: Destination directory"<<std::endl;
+    std::cout<<"\t-s, --source: Source directory"<<std::endl;
+    std::cout<<"\t-H, --help: Display this help and exit"<<std::endl;
+    std::cout<<"\t-p, --pattern: Regex pattern to match file names"<<std::endl;
+    std::cout<<"\t-c, --color-off: Disable colored output"<<std::endl;
+    std::cout<<"\t-v, --verbose: Print verbose information."<<std::endl;
+    std::cout<<"When SOURCE is not given, the current directory is used"<<std::endl;
+    std::cout<<"SOURCE and DEST can be given in order without option tags"<<std::endl;
+    std::cout<<"\tExample: compdir /home/user/source /home/user/destination"<<std::endl;
+    std::cout<<"\twhich is equivalent to:"<<std::endl;
+    std::cout<<"\tcompdir -s /home/user/source -d /home/user/destination"<<std::endl;
 }
 
 bool Arguments::parseArguments(int argc, char **argv){

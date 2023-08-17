@@ -8,15 +8,17 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(googletest)
 include_directories(${GTEST_INCLUDE_DIRS})
-# include_directories(build/_dep/googletst-src/googletest/include)
-# include_directories(build/_dep/googltest-src/googlemock/include)
+# include_directories(build/_deps/googletst-src/googletest/include)
+include_directories("${CMAKE_BINARY_DIR}/_deps/googletest-src/googlemock/include")
+
+FILE(GLOB_RECURSE UTILS_TEST_SOURCES "utils/*.cpp")
 
 
-add_executable(arguments_test arguments_test.cpp ../src/utils/arguments.cpp ../src/utils/utils.cpp)
+add_executable(utils_test ${UTILS_TEST_SOURCES} ${UTILS_SRCS_CACHE})
 target_link_libraries(
-    arguments_test 
+    utils_test 
     GTest::gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(arguments_test)
+gtest_discover_tests(utils_test)

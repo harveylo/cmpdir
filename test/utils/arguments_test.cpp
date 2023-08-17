@@ -1,7 +1,10 @@
 #include <gtest/gtest.h>
 #include <arguments.h>
+#include <sstream>
 #include <string>
 #include <type_traits>
+#include <iostream>
+#include <fstream>
 
 auto& arguments = Arguments::getInstance();
 
@@ -157,6 +160,10 @@ TEST(ArgumentsParseTest, ParseMultipleWithTags){
     EXPECT_EQ("source", arguments.getSource());
     EXPECT_EQ("destination", arguments.getDestination());
     EXPECT_EQ("pattern", arguments.getPatternString());
+    EXPECT_FALSE(arguments.isColored());
+    EXPECT_TRUE(arguments.isVerbose());
+    EXPECT_TRUE(arguments.isRecursive());
+    EXPECT_TRUE(arguments.isIgnoreHidden());
 }
 TEST(ArgumentsParseTest, ParseMultipleWithTagsPre){
     std::string args[] = {"name","-cvhr","source","destination","pattern"};
@@ -184,6 +191,7 @@ TEST(ArgumentsParseTest, ParseMultipleWithLongTags){
     EXPECT_EQ("source", arguments.getSource());
     EXPECT_EQ("destination", arguments.getDestination());
     EXPECT_EQ("pattern", arguments.getPatternString());
+    EXPECT_TRUE(arguments.isIgnoreSize());
 }
 
 TEST(ArgumentsParseTest,ParseMultipleWithLongAndShort){
@@ -198,4 +206,51 @@ TEST(ArgumentsParseTest,ParseMultipleWithLongAndShort){
     EXPECT_EQ("source", arguments.getSource());
     EXPECT_EQ("destination", arguments.getDestination());
     EXPECT_EQ("pattern", arguments.getPatternString());
+}
+
+TEST(ArgumentsParseTest, UndefinedOption){
+    std::string args[] = {"name","--color-off","-s","source","--ignore-size","--destination","destination","-rv","-p","pattern","--ignore-hidden","-x"};
+    int n = sizeof(args)/sizeof(args[0]);
+    char* argv[n];
+    for(int i = 0;i<n;i++){
+        argv[i] = args[i].data();
+    }
+    EXPECT_FALSE(arguments.parseArguments(n, argv));
+}
+
+TEST(ArgumentsParseTest, MissingParameter){
+    std::string args[] = {"name","--color-off","--source","--ignore-size","--destination","destination","-rv","--ignore-hidden", "-p"};
+    int n = sizeof(args)/sizeof(args[0]);
+    char* argv[n];
+    for(int i = 0;i<n;i++){
+        argv[i] = args[i].data();
+    }
+    EXPECT_FALSE(arguments.parseArguments(n, argv));
+}
+
+TEST(ArgumentsTest, DisplayHelp){
+    auto* old = std::cout.rdbuf();
+    std::stringbuf  buffer;
+    std::cout.rdbuf(&buffer);
+    displayHelp();
+    std::cout.rdbuf(old);
+    std::string result = 
+    "Compare two directories and list files that are different.\n"
+    "Usage: cmpdir [OPTION]... [SOURCE] DEST [PATTERN]\n"
+    "Valid options:\n"
+    "\t-r, --recursive: Recursively compare sub-directories\n"
+    "\t-h, --ignore-hidden: Ignore hidden files and directories\n"
+    "\t-S, --ignore-size: Ignore file sizes, only compare file names\n"
+    "\t-d, --destination: Destination directory\n"
+    "\t-s, --source: Source directory\n"
+    "\t-H, --help: Display this help and exit\n"
+    "\t-p, --pattern: Regex pattern to match file names\n"
+    "\t-c, --color-off: Disable colored output\n"
+    "\t-v, --verbose: Print verbose information.\n"
+    "When SOURCE is not given, the current directory is used\n"
+    "SOURCE and DEST can be given in order without option tags\n"
+    "\tExample: compdir /home/user/source /home/user/destination\n"
+    "\twhich is equivalent to:\n"
+    "\tcompdir -s /home/user/source -d /home/user/destination\n";
+    EXPECT_EQ(result, buffer.str());
 }
