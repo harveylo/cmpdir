@@ -1,4 +1,3 @@
-enable_testing()
 
 # Add GoogleTest framework
 include(FetchContent)
