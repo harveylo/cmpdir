@@ -40,10 +40,6 @@ add_custom_target(cov_report
     COMMAND genhtml ${TEST_P}/cover.info -o ${TEST_P}/report --rc genhtml_branch_coverage=1
 )
 
-# Put enable_testing() at the top of top-level CMakeLists.txt file
-# to enable testing via visual studio code's 'Run Ctest' button or command
-# Recommend to run tests via 'ctest' command in terminal under build directory
-enable_testing()
 add_subdirectory(src)
 add_subdirectory(test)
 include(CPack)
